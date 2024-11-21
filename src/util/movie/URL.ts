@@ -22,5 +22,7 @@ export class URLService {
   getURL4GenreMovies = (apiKey: string, genre: string, page: number = 1) => {
     return `https://api.themoviedb.org/3/discover/movie?api_key=${apiKey}&with_genres=${genre}&language=ko-KR&page=${page}`;
   }
+  getURL4NowPlayingMovies(apiKey) {
+    return `https://api.themoviedb.org/3/movie/now_playing?api_key=${apiKey}&language=ko-KR&page=1`;
+  }
 }
-
