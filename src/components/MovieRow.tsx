@@ -191,7 +191,7 @@ function MovieRow({ title, fetchUrl }) {
 
 
                   {isInWishlist(movie.id) && (
-                    <div className="wishlist-indicator">👍</div>
+                    <div className="wishlist-indicator">❤️</div>
                   )}
                 </div>
               ))}
