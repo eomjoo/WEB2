@@ -22,15 +22,15 @@ h2 {
 }
 
 .movie-card {
-  flex: 0 0 auto;
+  flex: 0 0 calc(100% / 6 - 10px); /* 한 줄에 6개씩 보이도록 설정 */
   position: relative;
   cursor: pointer;
   margin-right: 10px;
 }
 
 .movie-card img {
-  width: 200px;
-  height: 300px;
+  width: 250px;
+  height: 1000px;
   object-fit: cover;
   border-radius: 4px;
 }
