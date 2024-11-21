@@ -36,9 +36,9 @@ function MovieRow({ title, fetchUrl }) {
     return `https://image.tmdb.org/t/p/w300${path}`;
   };
 
-  // Scroll handling
+  // Scroll handling        // 변경전!!!
   const slide = useCallback((direction, amount = null) => {
-    const slideAmount = amount || sliderWindowRef.current?.clientWidth * 0.8;
+    const slideAmount = amount || sliderWindowRef.current?.clientWidth / 6  ;
     setScrollAmount(prev => {
       if (direction === 'left') {
         return Math.max(0, prev - slideAmount);
@@ -49,10 +49,9 @@ function MovieRow({ title, fetchUrl }) {
 
   const calculateMaxScroll = useCallback(() => {
     if (sliderRef.current && sliderWindowRef.current) {
-      const newMaxScroll = Math.max(
-        0,
-        sliderRef.current.scrollWidth - sliderWindowRef.current.clientWidth
-      );
+      const visibleWidth = sliderWindowRef.current.clientWidth;
+      const contentWidth = sliderRef.current.scrollWidth;
+      const newMaxScroll = Math.max(0, contentWidth - visibleWidth);
       setMaxScroll(newMaxScroll);
     }
   }, []);
