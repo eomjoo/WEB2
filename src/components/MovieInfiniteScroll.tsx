@@ -3,6 +3,16 @@ import React, { useState, useEffect, useRef, useCallback } from "react";
 import axios from "axios";
 import "./MovieInfiniteScroll.css";
 
+const genreMap = {
+  28: "액션",
+  12: "어드벤처",
+  35: "코미디",
+  80: "범죄",
+  10749: "로맨스",
+  878: "SF",
+  18: "드라마",
+};
+
 const MovieInfiniteScroll = ({
   genreCode,
   apiKey,
@@ -50,7 +60,6 @@ const MovieInfiniteScroll = ({
         }
 
         filteredMovies = filteredMovies.filter((movie) => {
-          console.log(movie)
           if (voteAverage === -1) return true;
           if (voteAverage === -2) return movie.vote_average <= 4;
           return (
@@ -59,9 +68,7 @@ const MovieInfiniteScroll = ({
           );
         });
 
-        console.log(filteredMovies)
-
-        setMovies(prev => shouldReset ? filteredMovies : [...prev, ...filteredMovies]);
+        setMovies((prev) => (shouldReset ? filteredMovies : [...prev, ...filteredMovies]));
         setCurrentPage(page + 1);
         setHasMore(filteredMovies.length > 0);
       } else {
@@ -144,12 +151,9 @@ const MovieInfiniteScroll = ({
 
   return (
     <div className="movie-grid" ref={gridContainerRef}>
-      <div className={`grid-container`}>
+      <div className="grid-container">
         {visibleMovieGroups.map((group, groupIndex) => (
-          <div
-            key={groupIndex}
-            className={`movie-row ${group.length === rowSize ? "full" : ""}`}
-          >
+          <div key={groupIndex} className="movie-row">
             {group.map((movie) => (
               <div key={movie.id} className="movie-card">
                 <img
@@ -161,7 +165,12 @@ const MovieInfiniteScroll = ({
                   alt={movie.title}
                   loading="lazy"
                 />
-                <div className="movie-title">{movie.title}</div>
+                {/* 추가된 영화 정보 */}
+                <div className="movie-info">
+                  <h3>{movie.title}</h3>
+                  <p>평점: ⭐{movie.vote_average}</p>
+                  <p>장르: {movie.genre_ids.map((id) => genreMap[id]).join(", ")}</p>
+                </div>
               </div>
             ))}
           </div>
