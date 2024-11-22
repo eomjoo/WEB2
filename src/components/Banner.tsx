@@ -19,7 +19,7 @@ function Banner({ movies }) {
       setCurrentIndex((prevIndex) =>
         prevIndex === movies.length - 1 ? 0 : prevIndex + 1
       );
-    }, 5000); // 3초 간격
+    }, 3000); 
 
     return () => clearInterval(interval); // 컴포넌트 언마운트 시 정리
   }, [movies]);
