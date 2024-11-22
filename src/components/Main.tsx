@@ -13,7 +13,13 @@ function HomeMain() {
   const urls = {
     popular: urlService.getURL4PopularMovies(apiKey),
     newReleases: urlService.getURL4ReleaseMovies(apiKey),
-    action: urlService.getURL4GenreMovies(apiKey, '28')
+    action: urlService.getURL4GenreMovies(apiKey, '28'),
+    horror: urlService.getURL4GenreMovies(apiKey, '27') , // 공포 영화 추가
+    comedy: urlService.getURL4GenreMovies(apiKey, '35'),  // 코미디
+    documentary: urlService.getURL4GenreMovies(apiKey, '99'),  // 다큐
+    romance: urlService.getURL4GenreMovies(apiKey, '10749'),  // 로맨스
+    sf: urlService.getURL4GenreMovies(apiKey, '878'),  // sf
+    nowPlaying: urlService.getURL4NowPlayingMovies(apiKey), // 현재 상영작 추가
   };
 
   // Load featured movie
@@ -51,6 +57,10 @@ function HomeMain() {
       <Banner movie={featuredMovie} />
       <div className="movie-rows">
         <MovieRow 
+          title="현재 상영작" 
+          fetchUrl={urls.nowPlaying} 
+        />
+        <MovieRow 
           title="인기영화" 
           fetchUrl={urls.popular} 
         />
@@ -61,6 +71,26 @@ function HomeMain() {
         <MovieRow 
           title="액션영화" 
           fetchUrl={urls.action} 
+        />
+        <MovieRow 
+          title="공포영화" 
+          fetchUrl={urls.horror} 
+        />
+        <MovieRow 
+          title="코미디" 
+          fetchUrl={urls.comedy} 
+        />
+        <MovieRow 
+          title="로맨스" 
+          fetchUrl={urls.romance} 
+        />
+        <MovieRow 
+          title="sf" 
+          fetchUrl={urls.sf} 
+        />
+        <MovieRow 
+          title="다큐멘테리" 
+          fetchUrl={urls.documentary} 
         />
       </div>
       <Outlet />

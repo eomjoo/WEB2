@@ -78,6 +78,28 @@ function MovieRow({ title, fetchUrl }) {
     setTouchEndX(event.touches[0].clientX);
   };
 
+  const genreMap = {
+    28: "액션",
+    12: "어드벤처",
+    16: "애니메이션",
+    35: "코미디",
+    80: "범죄",
+    99: "다큐멘터리",
+    18: "드라마",
+    10751: "가족",
+    14: "판타지",
+    36: "역사",
+    27: "공포",
+    10402: "음악",
+    9648: "미스터리",
+    10749: "로맨스",
+    878: "SF",
+    10770: "TV 영화",
+    53: "스릴러",
+    10752: "전쟁",
+    37: "서부"
+  };
+
   const handleTouchMove = (event) => {
     setTouchEndX(event.touches[0].clientX);
   };
@@ -160,8 +182,15 @@ function MovieRow({ title, fetchUrl }) {
                     src={getImageUrl(movie.poster_path)}
                     alt={movie.title}
                   />
+                  <div className="movie-info">
+        <h3>{movie.title}</h3>
+      <p>평점: ⭐{movie.vote_average}</p>
+      <p>장르: {movie.genre_ids.map(id => genreMap[id]).join(', ')}</p>
+    </div>
+
+
                   {isInWishlist(movie.id) && (
-                    <div className="wishlist-indicator">👍</div>
+                    <div className="wishlist-indicator">❤️</div>
                   )}
                 </div>
               ))}

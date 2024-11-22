@@ -10,7 +10,7 @@ function Banner({ movie }) {
 
   // If no movie, don't render anything (equivalent to *ngIf="movie")
   if (!movie) return null;
-
+  
   return (
     <div 
       className="banner" 

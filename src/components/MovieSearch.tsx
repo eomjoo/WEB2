@@ -4,7 +4,9 @@ import "./MovieSearch.css"; // Adjust for your CSS structure
 
 const MovieSearch = ({ onChangeOptions }) => {
   const dropdowns = {
-    originalLanguage: ["장르 (전체)", "Action", "Adventure", "Comedy", "Crime", "Family"],
+    originalLanguage: ["장르 (전체)", "액션", "어드벤처", "애니메이션", "코미디", "범죄", "다큐멘터리"
+    , "드라마", "가족", "판타지", "역사", "공포", "음악", "미스터리", "로맨스", "SF", "TV영화", "스릴러", "전쟁", "서부"],
+    
     translationLanguage: ["평점 (전체)", "9~10", "8~9", "7~8", "6~7", "5~6", "4~5", "4점 이하"],
     sorting: ["언어 (전체)", "영어", "한국어"],
   };
