@@ -103,7 +103,7 @@ const MovieWishlist = () => {
               <div key={movie.id} className="movie-card" onClick={() => toggleWishlist(movie)}>
                 <img src={getImageUrl(movie.poster_path)} alt={movie.title} />
                 <div className="movie-title">{movie.title}</div>
-                <div className="wishlist-indicator">👍</div>
+                <div className="wishlist-indicator">❤️</div>
               </div>
             ))}
           </div>
