@@ -1,8 +1,18 @@
 // @ts-nocheck
 import React, { useState, useEffect, useRef, useCallback } from "react";
 import axios from "axios";
-import "./MovieGrid.css"
+import "./MovieGrid.css";
 import { wishlistService } from "../util/movie/wishlist";
+
+const genreMap = {
+  28: "액션",
+  12: "어드벤처",
+  35: "코미디",
+  80: "범죄",
+  10749: "로맨스",
+  878: "SF",
+  18: "드라마",
+};
 
 const MovieGrid = ({ title, fetchUrl }) => {
   const gridContainerRef = useRef(null);
@@ -93,7 +103,8 @@ const MovieGrid = ({ title, fetchUrl }) => {
 
   return (
     <div className="movie-grid grid" ref={gridContainerRef}>
-      <div className={`grid-container`}>
+      <h2>{title}</h2>
+      <div className="grid-container">
         {visibleMovieGroups().map((movieGroup, groupIndex) => (
           <div
             key={groupIndex}
@@ -105,9 +116,18 @@ const MovieGrid = ({ title, fetchUrl }) => {
                 className="movie-card"
                 onMouseUp={() => toggleWishlist(movie)}
               >
-                <img src={`https://image.tmdb.org/t/p/w300${movie.poster_path}`} alt={movie.title} />
-                <div className="movie-title">{movie.title}</div>
-                {isInWishlist(movie.id) && <div className="wishlist-indicator">👍</div>}
+                <img
+                  src={`https://image.tmdb.org/t/p/w300${movie.poster_path}`}
+                  alt={movie.title}
+                  className="movie-poster"
+                />
+                {/* 마우스 오버 시 표시되는 영화 정보 */}
+                <div className="movie-info">
+                  <h3>{movie.title}</h3>
+                  <p>평점: ⭐{movie.vote_average}</p>
+                  <p>장르: {movie.genre_ids.map((id) => genreMap[id]).join(", ")}</p>
+                </div>
+                {isInWishlist(movie.id) && <div className="wishlist-indicator">❤️</div>}
               </div>
             ))}
           </div>
