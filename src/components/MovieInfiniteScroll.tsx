@@ -11,6 +11,16 @@ const genreMap = {
   10749: "로맨스",
   878: "SF",
   18: "드라마",
+  27: "공포",
+  16: "애니메이션",
+  99: "다큐멘터리",
+  14: "판타지",
+  36: "역사",
+  10402: "음악",
+  9648: "미스터리",
+  10749: "로맨스",
+  53: "스릴러",
+  10752: "전쟁"
 };
 
 const MovieInfiniteScroll = ({
@@ -23,6 +33,7 @@ const MovieInfiniteScroll = ({
   const loadingTriggerRef = useRef(null);
 
   const [movies, setMovies] = useState([]);
+  const [wishlist, setWishlist] = useState(new Set()); // 위시리스트 상태 추가
   const [currentPage, setCurrentPage] = useState(1);
   const [rowSize, setRowSize] = useState(4);
   const [isLoading, setIsLoading] = useState(false);
@@ -68,7 +79,9 @@ const MovieInfiniteScroll = ({
           );
         });
 
-        setMovies((prev) => (shouldReset ? filteredMovies : [...prev, ...filteredMovies]));
+        setMovies((prev) =>
+          shouldReset ? filteredMovies : [...prev, ...filteredMovies]
+        );
         setCurrentPage(page + 1);
         setHasMore(filteredMovies.length > 0);
       } else {
@@ -81,7 +94,20 @@ const MovieInfiniteScroll = ({
     }
   }, [genreCode, apiKey, sortingOrder, voteAverage]);
 
-  // Reset and fetch when filters change
+  const toggleWishlist = (movieId) => {
+    setWishlist((prev) => {
+      const updatedWishlist = new Set(prev);
+      if (updatedWishlist.has(movieId)) {
+        updatedWishlist.delete(movieId);
+      } else {
+        updatedWishlist.add(movieId);
+      }
+      return updatedWishlist;
+    });
+  };
+
+  const isInWishlist = (movieId) => wishlist.has(movieId); // 영화가 위시리스트에 있는지 확인
+
   useEffect(() => {
     setCurrentPage(1);
     setHasMore(true);
@@ -155,7 +181,11 @@ const MovieInfiniteScroll = ({
         {visibleMovieGroups.map((group, groupIndex) => (
           <div key={groupIndex} className="movie-row">
             {group.map((movie) => (
-              <div key={movie.id} className="movie-card">
+              <div
+                key={movie.id}
+                className="movie-card"
+                onClick={() => toggleWishlist(movie.id)}
+              >
                 <img
                   src={
                     movie.poster_path
@@ -165,12 +195,14 @@ const MovieInfiniteScroll = ({
                   alt={movie.title}
                   loading="lazy"
                 />
-                {/* 추가된 영화 정보 */}
                 <div className="movie-info">
                   <h3>{movie.title}</h3>
                   <p>평점: ⭐{movie.vote_average}</p>
                   <p>장르: {movie.genre_ids.map((id) => genreMap[id]).join(", ")}</p>
                 </div>
+                {isInWishlist(movie.id) && (
+                  <div className="wishlist-indicator">❤️</div>
+                )}
               </div>
             ))}
           </div>
