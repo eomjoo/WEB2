@@ -27,7 +27,7 @@ function HomeMain() {
     try {
       const response = await fetch(urls.popular);
       const data = await response.json();
-      setFeaturedMovies(data.results.slice(0, 5)); // 슬라이더에 사용할 상위 5개 영화
+      setFeaturedMovies(data.results.slice(0, 10)); // 슬라이더에 사용할 상위 5개 영화
     } catch (error) {
       console.error("Error fetching featured movies:", error);
     }
