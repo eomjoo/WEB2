@@ -27,6 +27,7 @@ h2 {
   position: relative;
   cursor: pointer;
   margin-right: 10px;
+  
 }
 
 /* 영화 포스터 이미지 */
@@ -39,7 +40,9 @@ h2 {
 
 /* 영화 카드 호버 시 확대 효과 */
 .movie-card:hover {
-  transform: scale(1.05); /* 호버 시 살짝 확대 */
+  transform: scale(100); /* 확대 비율을 1.2로 조정 */
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.5); /* 호버 시 그림자 효과 추가 */
+  z-index: 10; /* 겹쳐지는 요소 위로 올라오도록 설정 */
 }
 
 /* 영화 정보 */
