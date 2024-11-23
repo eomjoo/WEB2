@@ -74,7 +74,7 @@ button {
   border-radius:50px;
   border:none;
   width:100%;
-  background-color: #2069ff;
+  background-color:#ff6b6b;
   color:#fff;
   padding:17px;
   text-transform:uppercase;
@@ -180,8 +180,8 @@ button:hover {
   height: 22px;
   border-top: 2px solid transparent;
   border-left: 2px solid transparent;
-  border-right: 2px solid #2069ff;
-  border-bottom: 2px solid #2069ff;
+  border-right: 2px solid #ff6b6b;
+  border-bottom: 2px solid#ff6b6b;
   transform: rotate(40deg);
   backface-visibility: hidden;
   transform-origin: 100% 100%;
@@ -270,10 +270,11 @@ button:hover {
 }
 
 .card.hidden {
-  background-color:#2069ff;
-  box-shadow: 0px 20px 40px rgba(23,83,209,0.8);
-  padding:0px 30px 0px 30px;
-
+  background-color: #ff6b6b; /* 부드러운 레드톤 */
+  box-shadow: 0px 20px 50px rgba(255, 107, 107, 0.7); /* 그림자 강조 */
+  padding: 0px 40px 0px 40px; /* 여백 조정 */
+  border-radius: 15px; /* 카드 모서리 둥글게 */
+  transition: background-color 0.4s ease, box-shadow 0.4s ease, padding 0.4s ease;
 }
 
 #register.hidden form {
@@ -285,15 +286,20 @@ button:hover {
 }
 
 .hidden form {
-  opacity:0;
-  transition: all 0.3s ease;
+  opacity: 0;
+  transform: scale(0.9); /* 작아지는 효과 추가 */
+  transition: opacity 0.3s ease, transform 0.3s ease; /* 애니메이션 효과 추가 */
 }
 
 .hidden .account-check {
-  opacity:1;
-  visibility:visible;
-  z-index:2;
-  transition: all 0.2s ease;
+  opacity: 1;
+  visibility: visible;
+  z-index: 2;
+  color: #ffffff; /* 텍스트 색상 흰색으로 변경 */
+  background-color: rgba(0, 0, 0, 0.5); /* 배경 반투명 검정 */
+  border-radius: 10px; /* 텍스트 박스 둥글게 */
+  padding: 10px 20px; /* 텍스트 박스 패딩 추가 */
+  transition: all 0.3s ease; /* 부드러운 전환 */
 }
 
 .register-swap {
