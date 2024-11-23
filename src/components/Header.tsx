@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faSearch, faUser, faTicket, faBars, faTimes } from '@fortawesome/free-solid-svg-icons';
+import { faSearch, faSignOutAlt, faFilm, faBars, faTimes } from '@fortawesome/free-solid-svg-icons';
 import './Header.css';
 
 const Header = () => {
@@ -36,7 +36,7 @@ const Header = () => {
         <div className="header-left">
           <div className="logo">
             <a href="/">
-              <FontAwesomeIcon icon={faTicket} style={{ width: '18px', height: '100%', color: '#E50914' }} />
+              <FontAwesomeIcon icon={faFilm} style={{ width: '40px', height: '100%', color: '#e4e459' }} />
             </a>
           </div>
           <nav className="nav-links desktop-nav">
@@ -50,7 +50,7 @@ const Header = () => {
         </div>
         <div className="header-right">
           <button className="icon-button" onClick={removeKey}>
-            <FontAwesomeIcon icon={faUser} />
+            <FontAwesomeIcon icon={faSignOutAlt} />
           </button>
           <button className="icon-button mobile-menu-button" onClick={toggleMobileMenu}>
             <FontAwesomeIcon icon={faBars} />
