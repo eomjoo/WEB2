@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { authService } from '../util/auth/auth.service';
-import "./SignIn.css"
+import "./SignIn.css";
 
 const SignIn = () => {
   const navigate = useNavigate();
@@ -14,20 +14,21 @@ const SignIn = () => {
     registerPassword: '',
     confirmPassword: '',
     rememberMe: false,
-    acceptTerms: false
+    acceptTerms: false,
   });
 
+  const [errorMessage, setErrorMessage] = useState(''); // 에러 메시지 상태 추가
   const [focusedInputs, setFocusedInputs] = useState({
     email: false,
     password: false,
     registerEmail: false,
     registerPassword: false,
-    confirmPassword: false
+    confirmPassword: false,
   });
 
   const isLoginFormValid = formData.email && formData.password;
 
-  const isRegisterFormValid = 
+  const isRegisterFormValid =
     formData.registerEmail &&
     formData.registerPassword &&
     formData.confirmPassword &&
@@ -36,41 +37,50 @@ const SignIn = () => {
 
   const toggleCard = () => {
     setIsLoginVisible(!isLoginVisible);
-    setTimeout(() => {
-      document.getElementById('register')?.classList.toggle('register-swap');
-      document.getElementById('login')?.classList.toggle('login-swap');
-    }, 50);
+    setErrorMessage(''); // 폼 전환 시 에러 메시지 초기화
   };
 
   const handleInputChange = (e) => {
     const { name, value, type, checked } = e.target;
-    setFormData(prev => ({
+    setFormData((prev) => ({
       ...prev,
-      [name]: type === 'checkbox' ? checked : value
+      [name]: type === 'checkbox' ? checked : value,
     }));
   };
 
   const handleFocus = (inputName) => {
-    setFocusedInputs(prev => ({
+    setFocusedInputs((prev) => ({
       ...prev,
-      [inputName]: true
+      [inputName]: true,
     }));
   };
 
   const handleBlur = (inputName) => {
-    setFocusedInputs(prev => ({
+    setFocusedInputs((prev) => ({
       ...prev,
-      [inputName]: false
+      [inputName]: false,
     }));
   };
 
-  const handleLogin = async (e) => {
+  const handleLogin = (e) => {
     e.preventDefault();
-    try {
-      await authService.tryLogin(formData.email, formData.password);
+  
+    // 로컬 스토리지에서 사용자 목록 가져오기
+    const users = JSON.parse(localStorage.getItem('users') || '[]');
+    // 입력된 이메일과 비밀번호로 사용자 확인
+    const user = users.find(
+      (user) => user.id === formData.email && user.password === formData.password
+    );
+  
+    if (user) {
+      // 성공: 메시지 초기화, 성공 알림, 페이지 이동
+      setErrorMessage('');
+      alert('로그인 성공! 환영합니다.');
       navigate('/');
-    } catch (error) {
-      alert('Login failed');
+    } else {
+      // 실패: 에러 메시지 설정 및 실패 알림
+      setErrorMessage('아이디 또는 비밀번호가 일치하지 않습니다.');
+      alert('아이디 또는 비밀번호가 일치하지 않습니다.');
     }
   };
 
@@ -78,9 +88,10 @@ const SignIn = () => {
     e.preventDefault();
     try {
       await authService.tryRegister(formData.registerEmail, formData.registerPassword);
+      alert('회원가입 성공! 이제 로그인할 수 있습니다.');
       toggleCard();
     } catch (error) {
-      alert(error.message);
+      setErrorMessage(error.message);
     }
   };
 
@@ -93,6 +104,7 @@ const SignIn = () => {
             <div className={`card ${!isLoginVisible ? 'hidden' : ''}`} id="login">
               <form onSubmit={handleLogin}>
                 <h1>Sign in</h1>
+                {errorMessage && <p className="error-message">{errorMessage}</p>}
                 <div className={`input ${focusedInputs.email || formData.email ? 'active' : ''}`}>
                   <input
                     id="email"
@@ -125,14 +137,16 @@ const SignIn = () => {
                     checked={formData.rememberMe}
                     onChange={handleInputChange}
                   />
-                  <label htmlFor="remember" className="read-text">Remember me</label>
+                  <label htmlFor="remember" className="read-text">
+                    Remember me
+                  </label>
                 </span>
                 <span className="checkbox forgot">
                   <a href="#">Forgot Password?</a>
                 </span>
                 <button disabled={!isLoginFormValid}>Login</button>
               </form>
-              
+
               <a href="javascript:void(0)" id="gotologin" className="account-check" onClick={toggleCard}>
                 Already have an account? <b>Sign in</b>
               </a>
@@ -141,6 +155,7 @@ const SignIn = () => {
             <div className={`card ${isLoginVisible ? 'hidden' : ''}`} id="register">
               <form onSubmit={handleRegister}>
                 <h1>Sign up</h1>
+                {errorMessage && <p className="error-message">{errorMessage}</p>}
                 <div className={`input ${focusedInputs.registerEmail || formData.registerEmail ? 'active' : ''}`}>
                   <input
                     id="register-email"
@@ -189,7 +204,9 @@ const SignIn = () => {
                     I have read <b>Terms and Conditions</b>
                   </label>
                 </span>
-                <button type="submit" disabled={!isRegisterFormValid}>Register</button>
+                <button type="submit" disabled={!isRegisterFormValid}>
+                  Register
+                </button>
               </form>
               <a href="javascript:void(0)" className="account-check" onClick={toggleCard}>
                 Don't have an account? <b>Sign up</b>
