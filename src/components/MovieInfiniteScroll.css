@@ -86,13 +86,12 @@
 }
 
 .spinner {
-  width: 40px;
-  height: 40px;
-  border: 4px solid rgba(0, 0, 0, 0.1);
-  border-top-color: #2069ff;
+  width: 50px;
+  height: 50px;
+  border: 6px solid rgba(0, 0, 0, 0.1); /* 바깥 테두리 흐림 */
+  border-top: 6px solid #2069ff; /* 상단 테두리 색상 */
   border-radius: 50%;
-  animation: spin 1s linear infinite;
-  margin-bottom: 10px;
+  animation: spin 1s linear infinite, colorChange 3s ease-in-out infinite;
 }
 
 .top-button {
@@ -170,10 +169,72 @@
 
 .loading-indicator {
   display: flex;
-  flex-direction: column;
-  align-items: center;
   justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  gap: 15px;
+  color: #2069ff;
   margin: 20px 0;
-  color: #555;
-  font-size: 1.2rem;
+  font-weight: bold;
 }
+
+/* 스피너 색상 변화 애니메이션 */
+@keyframes colorChange {
+  0% {
+    border-top-color: #2069ff;
+  }
+  50% {
+    border-top-color: #00bcd4;
+  }
+  100% {
+    border-top-color: #ff5722;
+  }
+}
+
+.movie-grid.loading {
+  filter: blur(5px); /* 배경 흐리기 */
+  opacity: 0.6;
+  pointer-events: none; /* 사용자 상호작용 차단 */
+  transition: opacity 0.3s ease, filter 0.3s ease;
+}
+
+.loading-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000; /* 위로 올리기 */
+  animation: fadeIn 0.5s ease;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.loading-text {
+  font-size: 1.5rem;
+  color: #ffffff;
+  animation: fadeInOut 1.5s infinite ease-in-out;
+}
+
+/* 텍스트 애니메이션 */
+@keyframes fadeInOut {
+  0%, 100% {
+    opacity: 0.3;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+
