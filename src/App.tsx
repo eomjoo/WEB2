@@ -5,23 +5,22 @@ import HomeMain from './components/Main';
 import HomeWishlist from './components/Wishlist';
 import Search from './components/Search';
 import HomePopular from './components/Popular';
-import "./App.css"
+import './App.css';
 
-// Optional: Auth Guard equivalent using a wrapper component
-const ProtectedRoute = ({ children }: {
+// Auth Guard for route protection
+const ProtectedRoute = ({
+  children,
+}: {
   children: React.ReactNode;
-}) => {
-  // Implement your auth logic here
-  const isAuthenticated = true; // Replace with your auth check
-  
+}): React.ReactElement | null => {
+  const isAuthenticated = Boolean(localStorage.getItem('authToken')); // 실제 인증 로직
   if (!isAuthenticated) {
     return <Navigate to="/signin" replace />;
   }
-  
-  return children;
+  return <>{children}</>; // JSX 요소 반환
 };
 
-// Define routes configuration
+// Router configuration
 const router = createBrowserRouter([
   {
     path: '/',
@@ -33,29 +32,29 @@ const router = createBrowserRouter([
     children: [
       {
         path: '',
-        element: <HomeMain />
+        element: <HomeMain />,
       },
       {
         path: 'popular',
-        element: <HomePopular />
+        element: <HomePopular />,
       },
       {
         path: 'wishlist',
-        element: <HomeWishlist />
+        element: <HomeWishlist />,
       },
       {
         path: 'search',
-        element: <Search />
-      }
-    ]
+        element: <Search />,
+      },
+    ],
   },
   {
     path: '/signin',
-    element: <SignIn />
-  }
+    element: <SignIn />,
+  },
 ]);
 
-// In your App.js/tsx
+// App component
 function App() {
   return <RouterProvider router={router} />;
 }
