@@ -7,13 +7,20 @@ import Search from './components/Search';
 import HomePopular from './components/Popular';
 import './App.css';
 
-// Optional: Auth Guard equivalent using a wrapper component
-const ProtectedRoute = ({ children }: { children: React.ReactNode }): React.ReactElement | null => {
-
-  return <>{children}</>; // Ensure valid JSX return type
+// Auth Guard for route protection
+const ProtectedRoute = ({
+  children,
+}: {
+  children: React.ReactNode;
+}): React.ReactElement | null => {
+  const isAuthenticated = true; // Replace with actual authentication logic
+  if (!isAuthenticated) {
+    return <Navigate to="/signin" replace />;
+  }
+  return <>{children}</>;
 };
 
-// Define routes configuration
+// Router configuration
 const router = createBrowserRouter([
   {
     path: '/',
@@ -25,29 +32,29 @@ const router = createBrowserRouter([
     children: [
       {
         path: '',
-        element: <HomeMain />
+        element: <HomeMain />,
       },
       {
         path: 'popular',
-        element: <HomePopular />
+        element: <HomePopular />,
       },
       {
         path: 'wishlist',
-        element: <HomeWishlist />
+        element: <HomeWishlist />,
       },
       {
         path: 'search',
-        element: <Search />
-      }
-    ]
+        element: <Search />,
+      },
+    ],
   },
   {
     path: '/signin',
-    element: <SignIn />
-  }
+    element: <SignIn />,
+  },
 ]);
 
-// In your App.js/tsx
+// App component
 function App() {
   return <RouterProvider router={router} />;
 }
