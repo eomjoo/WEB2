@@ -13,14 +13,11 @@ const ProtectedRoute = ({
 }: {
   children: React.ReactNode;
 }): React.ReactElement | null => {
-  const isAuthenticated = Boolean(localStorage.getItem('authToken')); // 실제 인증 로직
-  if (!isAuthenticated) {
-    return <Navigate to="/signin" replace />;
-  }
-  return <>{children}</>; // JSX 요소 반환
+  
+  return <>{children}</>;
 };
 
-// Router configuration
+// Router configurationnpm
 const router = createBrowserRouter([
   {
     path: '/',
