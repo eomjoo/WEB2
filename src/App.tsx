@@ -52,7 +52,11 @@ const router = createBrowserRouter([
     path: '/signin',
     element: <SignIn />,
   },
-]);
+],
+{
+  basename: '/WEB2',
+}
+);
 
 // App component
 function App() {
