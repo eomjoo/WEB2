@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { createRoot } from 'react-dom/client';
+import { BrowserRouter } from 'react-router-dom'; // BrowserRouter 추가
 import './index.css';
 import App from './App.js';
 
@@ -11,6 +12,9 @@ if (!rootElement) {
 const root = createRoot(rootElement);
 root.render(
   <React.StrictMode>
-    <App />
+    {/* BrowserRouter로 App을 감싸고 basename을 설정 */}
+    <BrowserRouter basename="/WEB2/"> {/* 'WEB2'를 본인의 GitHub 리포지토리 이름으로 변경 */}
+      <App />
+    </BrowserRouter>
   </React.StrictMode>
 );
