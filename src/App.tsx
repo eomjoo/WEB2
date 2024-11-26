@@ -7,6 +7,8 @@ import Search from './components/Search';
 import HomePopular from './components/Popular';
 import './App.css';
 
+// const basename = import.meta.env.MODE === 'production' ? '/' : '/'; // 환경에 따라 basename 설정
+
 // Auth Guard for route protection
 const ProtectedRoute = ({
   children,
@@ -60,7 +62,7 @@ const router = createBrowserRouter([
 
 // App component
 function App() {
-  return <RouterProvider router={router} />;
+  return <RouterProvider router={router}  />;
 }
 
 export default App;
