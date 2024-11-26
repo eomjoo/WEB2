@@ -11,6 +11,7 @@
     "deploy": "gh-pages -d dist",
     "predeploy": "npm run build"
   },
+  "homepage": "https://eomjoo.github.io/WEB2",
   "dependencies": {
     "@fortawesome/free-solid-svg-icons": "^6.6.0",
     "@fortawesome/react-fontawesome": "^0.2.2",
