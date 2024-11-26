@@ -2,6 +2,7 @@
 import React, { useState, useEffect, useRef, useCallback } from "react";
 import axios from "axios";
 import "./MovieInfiniteScroll.css";
+import { wishlistService } from "../util/movie/wishlist";
 
 const genreMap = {
   28: "액션",
@@ -18,9 +19,8 @@ const genreMap = {
   36: "역사",
   10402: "음악",
   9648: "미스터리",
-  10749: "로맨스",
   53: "스릴러",
-  10752: "전쟁"
+  10752: "전쟁",
 };
 
 const MovieInfiniteScroll = ({
@@ -33,13 +33,23 @@ const MovieInfiniteScroll = ({
   const loadingTriggerRef = useRef(null);
 
   const [movies, setMovies] = useState([]);
-  const [wishlist, setWishlist] = useState(new Set()); // 위시리스트 상태 추가
   const [currentPage, setCurrentPage] = useState(1);
   const [rowSize, setRowSize] = useState(4);
   const [isLoading, setIsLoading] = useState(false);
   const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
   const [hasMore, setHasMore] = useState(true);
-  const [showTopButton, setShowTopButton] = useState(false);
+  const [wishlist, setWishlist] = useState([]);
+
+  useEffect(() => {
+    // Load wishlist from the wishlistService when the component mounts
+    const subscription = wishlistService.wishlist$.subscribe((movies) => {
+      setWishlist(movies);
+    });
+
+    return () => {
+      subscription.unsubscribe();
+    };
+  }, []);
 
   const fetchMovies = useCallback(async (page, shouldReset = false) => {
     if (isLoading || (!hasMore && !shouldReset)) return;
@@ -62,28 +72,11 @@ const MovieInfiniteScroll = ({
       const newMovies = response.data.results;
 
       if (newMovies.length > 0) {
-        let filteredMovies = newMovies;
-
-        if (sortingOrder !== "all") {
-          filteredMovies = filteredMovies.filter(
-            (movie) => movie.original_language === sortingOrder
-          );
-        }
-
-        filteredMovies = filteredMovies.filter((movie) => {
-          if (voteAverage === -1) return true;
-          if (voteAverage === -2) return movie.vote_average <= 4;
-          return (
-            movie.vote_average >= voteAverage &&
-            movie.vote_average < voteAverage + 1
-          );
-        });
-
         setMovies((prev) =>
-          shouldReset ? filteredMovies : [...prev, ...filteredMovies]
+          shouldReset ? newMovies : [...prev, ...newMovies]
         );
         setCurrentPage(page + 1);
-        setHasMore(filteredMovies.length > 0);
+        setHasMore(newMovies.length > 0);
       } else {
         setHasMore(false);
       }
@@ -92,63 +85,19 @@ const MovieInfiniteScroll = ({
     } finally {
       setIsLoading(false);
     }
-  }, [genreCode, apiKey, sortingOrder, voteAverage]);
+  }, [genreCode, apiKey]);
 
-  const toggleWishlist = (movieId) => {
-    setWishlist((prev) => {
-      const updatedWishlist = new Set(prev);
-      if (updatedWishlist.has(movieId)) {
-        updatedWishlist.delete(movieId);
-      } else {
-        updatedWishlist.add(movieId);
-      }
-      return updatedWishlist;
-    });
+  const toggleWishlist = (movie) => {
+    wishlistService.toggleWishlist(movie);
   };
 
-  const isInWishlist = (movieId) => wishlist.has(movieId); // 영화가 위시리스트에 있는지 확인
+  const isInWishlist = (movieId) => wishlist.some((movie) => movie.id === movieId);
 
   useEffect(() => {
     setCurrentPage(1);
     setHasMore(true);
     fetchMovies(1, true);
   }, [genreCode, apiKey, sortingOrder, voteAverage]);
-
-  useEffect(() => {
-    const handleResize = () => {
-      setIsMobile(window.innerWidth <= 768);
-      calculateRowSize();
-    };
-
-    const handleScroll = () => {
-      setShowTopButton(window.scrollY > 300);
-    };
-
-    window.addEventListener("resize", handleResize);
-    window.addEventListener("scroll", handleScroll);
-
-    return () => {
-      window.removeEventListener("resize", handleResize);
-      window.removeEventListener("scroll", handleScroll);
-    };
-  }, []);
-
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      (entries) => {
-        if (entries[0].isIntersecting && !isLoading && hasMore) {
-          fetchMovies(currentPage);
-        }
-      },
-      { rootMargin: "100px", threshold: 0.1 }
-    );
-
-    if (loadingTriggerRef.current) {
-      observer.observe(loadingTriggerRef.current);
-    }
-
-    return () => observer.disconnect();
-  }, [fetchMovies, hasMore, currentPage]);
 
   const calculateRowSize = useCallback(() => {
     if (gridContainerRef.current) {
@@ -158,13 +107,6 @@ const MovieInfiniteScroll = ({
       setRowSize(Math.floor(containerWidth / (movieCardWidth + horizontalGap)));
     }
   }, [isMobile]);
-
-  const scrollToTopAndReset = () => {
-    window.scrollTo({ top: 0, behavior: "smooth" });
-    setCurrentPage(1);
-    setHasMore(true);
-    fetchMovies(1, true);
-  };
 
   const visibleMovieGroups = movies.reduce((result, movie, index) => {
     const groupIndex = Math.floor(index / rowSize);
@@ -184,7 +126,7 @@ const MovieInfiniteScroll = ({
               <div
                 key={movie.id}
                 className="movie-card"
-                onClick={() => toggleWishlist(movie.id)}
+                onClick={() => toggleWishlist(movie)}
               >
                 <img
                   src={
@@ -208,25 +150,6 @@ const MovieInfiniteScroll = ({
           </div>
         ))}
       </div>
-
-      <div ref={loadingTriggerRef} className="loading-trigger">
-        {isLoading && (
-          <div className="loading-indicator">
-            <div className="spinner"></div>
-            <span>Loading...</span>
-          </div>
-        )}
-      </div>
-
-      {showTopButton && (
-        <button
-          className="top-button"
-          onClick={scrollToTopAndReset}
-          aria-label="맨 위로 이동"
-        >
-          Top
-        </button>
-      )}
     </div>
   );
 };
