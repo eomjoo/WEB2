@@ -75,7 +75,7 @@ const SignIn = () => {
     if (user) {
       // 성공: 메시지 초기화, 성공 알림, 페이지 이동
       setErrorMessage('');
-      alert('로그인 성공! 환영합니다.');
+      alert('로그인 성공!!! 대 환영합니다.');
       navigate('/');
     } else {
       // 실패: 에러 메시지 설정 및 실패 알림
@@ -88,7 +88,7 @@ const SignIn = () => {
     e.preventDefault();
     try {
       await authService.tryRegister(formData.registerEmail, formData.registerPassword);
-      alert('회원가입 성공! 이제 로그인할 수 있습니다.');
+      alert('회원가입 성공! 이제 로그인할 수 있습니다!!!!!.');
       toggleCard();
     } catch (error) {
       setErrorMessage(error.message);
